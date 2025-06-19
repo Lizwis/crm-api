@@ -26,7 +26,7 @@ class AuthApiTest extends TestCase
     /** @test */
     public function user_can_login_with_correct_credentials()
     {
-        $response = $this->postJson('/api/login', [
+        $response = $this->postJson('/api/v1/login', [
             'email' => $this->user->email,
             'password' => $this->password,
         ]);
@@ -40,12 +40,12 @@ class AuthApiTest extends TestCase
     /** @test */
     public function user_cannot_login_with_wrong_password()
     {
-        $response = $this->postJson('/api/login', [
+        $response = $this->postJson('/api/v1/login', [
             'email' => $this->user->email,
             'password' => 'wrong-password',
         ]);
 
-        $response->assertStatus(422) ->assertJsonValidationErrors(['email']);
+        $response->assertStatus(422)->assertJsonValidationErrors(['email']);
     }
 
     /** @test */
@@ -53,7 +53,7 @@ class AuthApiTest extends TestCase
     {
         $token = $this->user->createToken('api-token')->plainTextToken;
 
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->getJson('/api/user');
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->getJson('/api/v1/user');
 
         $response->assertStatus(200)->assertJson([
             'id' => $this->user->id,
@@ -66,12 +66,12 @@ class AuthApiTest extends TestCase
     {
         $token = $this->user->createToken('api-token')->plainTextToken;
 
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->postJson('/api/logout');
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->postJson('/api/v1/logout');
 
         $response->assertStatus(200)->assertJson([
             'message' => 'Logged out successfully',
         ]);
 
-        $this->assertCount(0, $this->user->tokens); 
+        $this->assertCount(0, $this->user->tokens);
     }
 }

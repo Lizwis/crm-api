@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ClientController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,10 +16,22 @@ use App\Http\Controllers\AuthController;
 |
 */
 
-Route::post('/login', [AuthController::class, 'login']);
+Route::prefix('v1')->group(function () {
 
-Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/user', [AuthController::class, 'user']);
-    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::post('/login', [AuthController::class, 'login']);
 
+    Route::middleware('auth:sanctum')->group(function () {
+
+        Route::get('/user', [AuthController::class, 'user']);
+        Route::post('/logout', [AuthController::class, 'logout']);
+
+
+        Route::prefix('clients')->group(function () {
+            Route::get('/', [ClientController::class, 'index']);
+            Route::post('/', [ClientController::class, 'store']);
+            Route::get('{client}', [ClientController::class, 'show']);
+            Route::put('{client}', [ClientController::class, 'update']);
+            Route::delete('{client}', [ClientController::class, 'destroy']);
+        });
+    });
 });

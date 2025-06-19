@@ -15,9 +15,11 @@ return new class extends Migration
             $table->id();
             $table->string('first_name');
             $table->string('last_name');
-            $table->string('email')->unique();
+            $table->string('email');
+            $table->string('phone_number');
             $table->unsignedBigInteger('created_by');
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('created_by')->references('id')->on('users');
         });

@@ -19,6 +19,7 @@ class ClientSeeder extends Seeder
                 'first_name' => fake()->firstName(),
                 'last_name' => fake()->lastName(),
                 'email' => fake()->unique()->safeEmail(),
+                'phone_number' => fake()->phoneNumber(),
                 'created_by' => $users->random()->id,
             ]);
         }
